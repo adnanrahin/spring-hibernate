@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.file.spliter</groupId>
+    <groupId>org.product.info</groupId>
     <artifactId>spring-hibernate</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -10,7 +10,8 @@
     <name>spring-hibernate</name>
 
     <modules>
-        <module>hibernate-objects-api</module>
+        <module>hibernate-entity-module</module>
+        <module>hibernate-services</module>
     </modules>
 
     <properties>
