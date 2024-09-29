@@ -10,7 +10,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
-    private int orderId;
+    private Long orderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = true)
@@ -32,7 +32,7 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Shipping> shippings;
 
-    public Order(int orderId, Customer customer, Date orderDate, double totalAmount, Set<OrderItem> orderItems, Set<Payment> payments, Set<Shipping> shippings) {
+    public Order(Long orderId, Customer customer, Date orderDate, double totalAmount, Set<OrderItem> orderItems, Set<Payment> payments, Set<Shipping> shippings) {
         this.orderId = orderId;
         this.customer = customer;
         this.orderDate = orderDate;
@@ -46,11 +46,11 @@ public class Order {
 
     }
 
-    public int getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(int orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 

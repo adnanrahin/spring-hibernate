@@ -9,7 +9,7 @@ public class Shipping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shipping_id")
-    private int shippingId;
+    private Long shippingId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = true)
@@ -27,7 +27,7 @@ public class Shipping {
     private Date deliveryDate;
 
 
-    public Shipping(int shippingId, Order order, String shippingAddress, Date shippingDate, Date deliveryDate) {
+    public Shipping(Long shippingId, Order order, String shippingAddress, Date shippingDate, Date deliveryDate) {
         this.shippingId = shippingId;
         this.order = order;
         this.shippingAddress = shippingAddress;
@@ -39,11 +39,11 @@ public class Shipping {
 
     }
 
-    public int getShippingId() {
+    public Long getShippingId() {
         return shippingId;
     }
 
-    public void setShippingId(int shippingId) {
+    public void setShippingId(Long shippingId) {
         this.shippingId = shippingId;
     }
 

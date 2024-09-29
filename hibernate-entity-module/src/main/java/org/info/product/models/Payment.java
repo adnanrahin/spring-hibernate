@@ -9,7 +9,7 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id")
-    private int paymentId;
+    private Long paymentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = true)
@@ -25,7 +25,7 @@ public class Payment {
     @Column(name = "payment_method", length = 50, nullable = true)
     private String paymentMethod;
 
-    public Payment(int paymentId, Order order, Date paymentDate, double amount, String paymentMethod) {
+    public Payment(Long paymentId, Order order, Date paymentDate, double amount, String paymentMethod) {
         this.paymentId = paymentId;
         this.order = order;
         this.paymentDate = paymentDate;
@@ -37,11 +37,11 @@ public class Payment {
 
     }
 
-    public int getPaymentId() {
+    public Long getPaymentId() {
         return paymentId;
     }
 
-    public void setPaymentId(int paymentId) {
+    public void setPaymentId(Long paymentId) {
         this.paymentId = paymentId;
     }
 
