@@ -80,7 +80,7 @@ public class OrderServiceImplTest {
         customer2.setLastName("Brown");
         customer2.setEmail("bob.brown@example.com");
         customer2.setPhoneNumber("4445556666");
-        
+
         session.save(customer1);
         session.save(customer2);
 

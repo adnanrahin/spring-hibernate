@@ -90,11 +90,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.7</version>
+                <version>3.0.0-M5</version> <!-- Use a stable version -->
                 <configuration>
                     <skipTests>false</skipTests>
                     <includes>
                         <include>**/*Test.*</include>
+                        <include>**/*Tests.*</include> <!-- Include pluralized test classes -->
+                        <include>**/*TestCase.*</include> <!-- Include test case classes -->
                     </includes>
                 </configuration>
             </plugin>
