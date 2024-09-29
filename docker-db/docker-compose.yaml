@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres-db
+    restart: always
+    volumes:
+      - test-db-vol:/var/lib/postgresql/data
+      - ./pg-dump:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: root
+    ports:
+      - "5432:5432"
+volumes:
+  test-db-vol: {}
