@@ -46,6 +46,7 @@ public class CustomerServiceImplTest extends TestCase {
         assertNotNull(savedCustomer);
         assertEquals("John", savedCustomer.getFirstName());
         assertEquals("Doe", savedCustomer.getLastName());
+        customerService.delete(savedCustomer);
     }
 
     @Test
@@ -62,6 +63,7 @@ public class CustomerServiceImplTest extends TestCase {
         assertNotNull(foundCustomer);
         assertEquals("Alice", foundCustomer.getFirstName());
         assertEquals("Smith", foundCustomer.getLastName());
+        customerService.delete(savedCustomer);
     }
 
     @Test
@@ -84,6 +86,8 @@ public class CustomerServiceImplTest extends TestCase {
         List<Customer> customers = customerService.findAll();
         assertNotNull(customers);
         assertTrue(customers.size() >= 2);
+        customerService.delete(customer1);
+        customerService.delete(customer2);
     }
 
     @Test
