@@ -1,0 +1,101 @@
+package org.product.info.services;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.info.product.models.Payment;
+import org.product.info.util.HibernateUtil;
+
+import java.util.List;
+
+public class PaymentServiceImpl implements PaymentService {
+
+    @Override
+    public List<Payment> findAllPayments() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Payment> payments = null;
+        try {
+            payments = session.createQuery("from Payment", Payment.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return payments;
+    }
+
+    @Override
+    public Payment findPaymentById(long id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Payment payment = null;
+        try {
+            payment = session.get(Payment.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return payment;
+    }
+
+    @Override
+    public Payment save(Payment payment) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            if (payment.getPaymentId() == null) {
+                session.save(payment);  // Save new payment
+            } else {
+                session.update(payment);  // Update existing payment
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return payment;
+    }
+
+    @Override
+    public void delete(Payment payment) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            session.delete(payment);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void deletePaymentById(long id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            Payment payment = session.get(Payment.class, id);
+            if (payment != null) {
+                session.delete(payment);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+}
