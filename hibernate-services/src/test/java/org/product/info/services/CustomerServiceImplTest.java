@@ -11,8 +11,6 @@ import org.product.info.util.HibernateUtil;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 public class CustomerServiceImplTest extends TestCase {
 
     private CustomerService customerService;

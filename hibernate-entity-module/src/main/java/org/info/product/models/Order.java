@@ -9,6 +9,7 @@ import java.util.Set;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_id")
     private int orderId;
 
     @ManyToOne(fetch = FetchType.LAZY)

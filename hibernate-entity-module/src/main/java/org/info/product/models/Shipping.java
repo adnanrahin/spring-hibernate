@@ -8,6 +8,7 @@ import java.util.Date;
 public class Shipping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "shipping_id")
     private int shippingId;
 
     @ManyToOne(fetch = FetchType.LAZY)
