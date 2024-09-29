@@ -4,24 +4,24 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "Payments")
+@Table(name = "Payments", schema = "product_schema")
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int paymentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = true)
     private Order order;
 
-    @Column(name = "payment_date", nullable = false)
+    @Column(name = "payment_date", nullable = true)
     @Temporal(TemporalType.DATE)
     private Date paymentDate;
 
-    @Column(name = "amount", nullable = false)
+    @Column(name = "amount", nullable = true)
     private double amount;
 
-    @Column(name = "payment_method", length = 50, nullable = false)
+    @Column(name = "payment_method", length = 50, nullable = true)
     private String paymentMethod;
 
     public Payment(int paymentId, Order order, Date paymentDate, double amount, String paymentMethod) {

@@ -5,21 +5,21 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "Orders")
+@Table(name = "Orders", schema = "product_schema")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "customer_id", nullable = true)
     private Customer customer;
 
-    @Column(name = "order_date", nullable = false)
+    @Column(name = "order_date", nullable = true)
     @Temporal(TemporalType.DATE)
     private Date orderDate;
 
-    @Column(name = "total_amount", nullable = false)
+    @Column(name = "total_amount", nullable = true)
     private double totalAmount;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

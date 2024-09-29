@@ -3,24 +3,24 @@ package org.info.product.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "OrderItems")
+@Table(name = "OrderItems", schema = "product_schema")
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderItemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = true)
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id", nullable = true)
     private Product product;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity", nullable = true)
     private int quantity;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price", nullable = true)
     private double price;
 
     public OrderItem(int orderItemId, Order order, Product product, int quantity, double price) {

@@ -3,19 +3,19 @@ package org.info.product.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Products")
+@Table(name = "Products", schema = "product_schema")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productId;
 
-    @Column(name = "product_name", nullable = false, length = 100)
+    @Column(name = "product_name", nullable = true, length = 100)
     private String productName;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price", nullable = true)
     private double price;
 
-    @Column(name = "stock_quantity", nullable = false)
+    @Column(name = "stock_quantity", nullable = true)
     private int stockQuantity;
 
     public Product(int productId, String productName, double price, int stockQuantity) {

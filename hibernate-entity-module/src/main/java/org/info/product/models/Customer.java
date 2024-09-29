@@ -4,19 +4,19 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "Customers")
+@Table(name = "Customers", schema = "product_schema")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int customerId;
+    private Long customerId;
 
-    @Column(name = "first_name", nullable = false, length = 50)
+    @Column(name = "first_name", nullable = true, length = 50)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false, length = 50)
+    @Column(name = "last_name", nullable = true, length = 50)
     private String lastName;
 
-    @Column(name = "email", unique = true, nullable = false, length = 100)
+    @Column(name = "email", unique = true, nullable = true, length = 100)
     private String email;
 
     @Column(name = "phone_number", length = 15)
@@ -25,7 +25,7 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Order> orders;
 
-    public Customer(int customerId, String firstName, String lastName, String email, String phoneNumber, Set<Order> orders) {
+    public Customer(Long customerId, String firstName, String lastName, String email, String phoneNumber, Set<Order> orders) {
         this.customerId = customerId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -38,11 +38,11 @@ public class Customer {
 
     }
 
-    public int getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 

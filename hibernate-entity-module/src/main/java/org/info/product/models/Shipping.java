@@ -4,20 +4,20 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "Shipping")
+@Table(name = "Shipping", schema = "product_schema")
 public class Shipping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int shippingId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = true)
     private Order order;
 
-    @Column(name = "shipping_address", length = 255, nullable = false)
+    @Column(name = "shipping_address", length = 255, nullable = true)
     private String shippingAddress;
 
-    @Column(name = "shipping_date", nullable = false)
+    @Column(name = "shipping_date", nullable = true)
     @Temporal(TemporalType.DATE)
     private Date shippingDate;
 
