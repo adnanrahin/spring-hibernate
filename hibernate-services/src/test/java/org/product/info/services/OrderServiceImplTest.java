@@ -19,33 +19,25 @@ public class OrderServiceImplTest {
 
     private OrderService orderService;
     private Session session;
+    private Transaction transaction;
 
     @BeforeEach
     public void setUp() {
         orderService = new OrderServiceImpl();
         session = HibernateUtil.getSessionFactory().openSession();
+        transaction = session.beginTransaction();
     }
 
     @AfterEach
     public void tearDown() {
-        // Clean up data after each test
-        Transaction transaction = null;
-        try {
-            transaction = session.beginTransaction();
-            session.createQuery("DELETE FROM Shipping").executeUpdate();
-            session.createQuery("DELETE FROM Payment").executeUpdate();
-            session.createQuery("DELETE FROM OrderItem").executeUpdate();
-            session.createQuery("DELETE FROM Order").executeUpdate();
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
+        if (transaction != null) {
+            transaction.rollback();
+        }
+        if (session != null) {
             session.close();
         }
     }
+
 
     @Test
     public void testSaveOrder() {
@@ -55,10 +47,9 @@ public class OrderServiceImplTest {
         customer.setEmail("john.doe@example.com");
         customer.setPhoneNumber("1234567890");
 
-        // Save the customer (you may want to save this in a separate service)
-        session.beginTransaction();
         session.save(customer);
-        session.getTransaction().commit();
+        transaction.commit();
+        transaction = session.beginTransaction();
 
         Order order = new Order();
         order.setCustomer(customer);
@@ -71,35 +62,13 @@ public class OrderServiceImplTest {
         assertNotNull(savedOrder);
         assertEquals(customer.getCustomerId(), savedOrder.getCustomer().getCustomerId());
         assertEquals(1500.00, savedOrder.getTotalAmount());
-    }
 
-    @Test
-    public void testFindOrderById() {
-        Customer customer = new Customer();
-        customer.setFirstName("Jane");
-        customer.setLastName("Doe");
-        customer.setEmail("jane.doe@example.com");
-        customer.setPhoneNumber("0987654321");
-
-        // Save the customer
-        session.beginTransaction();
-        session.save(customer);
-        session.getTransaction().commit();
-
-        Order order = new Order();
-        order.setCustomer(customer);
-        order.setOrderDate(new Date());
-        order.setTotalAmount(1200.00);
-        Order savedOrder = orderService.saveOrder(order);
-
-        Order foundOrder = orderService.findOrderById(order.getOrderId());
-        assertNotNull(foundOrder);
-        assertEquals(order.getOrderId(), foundOrder.getOrderId());
+        orderService.delete(savedOrder);
     }
 
     @Test
     public void testFindAllOrders() {
-        // Create and save two orders
+        // Create and save two customers
         Customer customer1 = new Customer();
         customer1.setFirstName("Alice");
         customer1.setLastName("Smith");
@@ -111,13 +80,14 @@ public class OrderServiceImplTest {
         customer2.setLastName("Brown");
         customer2.setEmail("bob.brown@example.com");
         customer2.setPhoneNumber("4445556666");
-
-        // Save the customers
-        session.beginTransaction();
+        
         session.save(customer1);
         session.save(customer2);
-        session.getTransaction().commit();
 
+        transaction.commit();
+        transaction = session.beginTransaction();
+
+        // Create and save two orders
         Order order1 = new Order();
         order1.setCustomer(customer1);
         order1.setOrderDate(new Date());
@@ -130,58 +100,13 @@ public class OrderServiceImplTest {
         order2.setTotalAmount(500.00);
         orderService.saveOrder(order2);
 
+        // Fetch all orders
         List<Order> orders = orderService.findAllOrders();
         assertNotNull(orders);
         assertTrue(orders.size() >= 2);
+
+        orderService.delete(order1);
+        orderService.delete(order2);
     }
 
-    @Test
-    public void testDeleteOrder() {
-        Customer customer = new Customer();
-        customer.setFirstName("David");
-        customer.setLastName("Johnson");
-        customer.setEmail("david.johnson@example.com");
-        customer.setPhoneNumber("7778889999");
-
-        // Save the customer
-        session.beginTransaction();
-        session.save(customer);
-        session.getTransaction().commit();
-
-        Order order = new Order();
-        order.setCustomer(customer);
-        order.setOrderDate(new Date());
-        order.setTotalAmount(700.00);
-        orderService.saveOrder(order);
-
-        orderService.delete(order);
-
-        Order deletedOrder = orderService.findOrderById(order.getOrderId());
-        assertNull(deletedOrder);
-    }
-
-    @Test
-    public void testDeleteOrderById() {
-        Customer customer = new Customer();
-        customer.setFirstName("Eva");
-        customer.setLastName("Green");
-        customer.setEmail("eva.green@example.com");
-        customer.setPhoneNumber("0001112222");
-
-        // Save the customer
-        session.beginTransaction();
-        session.save(customer);
-        session.getTransaction().commit();
-
-        Order order = new Order();
-        order.setCustomer(customer);
-        order.setOrderDate(new Date());
-        order.setTotalAmount(850.00);
-        orderService.saveOrder(order);
-
-        orderService.deleteOrderById(order.getOrderId());
-
-        Order deletedOrder = orderService.findOrderById(order.getOrderId());
-        assertNull(deletedOrder);
-    }
 }

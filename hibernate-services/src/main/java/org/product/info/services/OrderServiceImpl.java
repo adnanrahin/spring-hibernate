@@ -30,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void saveOrder(Order order) {
+    public Order saveOrder(Order order) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -42,6 +42,7 @@ public class OrderServiceImpl implements OrderService {
             }
             e.printStackTrace();
         }
+        return order;
     }
 
     @Override
