@@ -21,4 +21,16 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="orderService" class="org.product.info.services.OrderServiceImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="productService" class="org.product.info.services.ProductServiceImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="paymentService" class="org.product.info.services.PaymentServiceImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
 </beans>
