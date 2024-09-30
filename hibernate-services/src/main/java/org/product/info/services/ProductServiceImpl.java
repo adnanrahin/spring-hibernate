@@ -14,8 +14,12 @@ import java.util.List;
 @Transactional
 public class ProductServiceImpl implements ProductService {
 
+    private SessionFactory sessionFactory; // Declare SessionFactory
+
     @Autowired
-    private SessionFactory sessionFactory;
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory; // Setter for sessionFactory
+    }
 
     @Override
     public List<Product> findAll() {
