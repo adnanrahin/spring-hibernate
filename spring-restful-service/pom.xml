@@ -9,7 +9,7 @@
 
     <groupId>org.product.restful.api</groupId>
     <artifactId>spring-restful-service</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>spring-restful-service</name>
 
@@ -97,7 +97,17 @@
 
     <build>
         <plugins>
+            <!-- Maven War Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.2</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
 
+            <!-- Compiler Plugin to set Java version -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -119,40 +129,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>${maven-assembly-plugin.version}</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorref>jar-with-dependencies</descriptorref>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version> <!-- Use a stable version -->
-                <configuration>
-                    <skipTests>false</skipTests>
-                    <includes>
-                        <include>**/*Test.*</include>
-                        <include>**/*Tests.*</include> <!-- Include pluralized test classes -->
-                        <include>**/*TestCase.*</include> <!-- Include test case classes -->
-                    </includes>
-                </configuration>
-            </plugin>
-
         </plugins>
     </build>
 
