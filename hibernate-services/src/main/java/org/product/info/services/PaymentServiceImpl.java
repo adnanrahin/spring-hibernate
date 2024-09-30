@@ -1,17 +1,25 @@
 package org.product.info.services;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.info.product.models.Payment;
-import org.product.info.util.HibernateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Service
+@Transactional
 public class PaymentServiceImpl implements PaymentService {
+
+    @Autowired
+    private SessionFactory sessionFactory;
 
     @Override
     public List<Payment> findAllPayments() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         List<Payment> payments = null;
         try {
             payments = session.createQuery("from Payment", Payment.class).list();
@@ -25,7 +33,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment findPaymentById(long id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         Payment payment = null;
         try {
             payment = session.get(Payment.class, id);
@@ -39,7 +47,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment save(Payment payment) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -62,7 +70,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public void delete(Payment payment) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -80,7 +88,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public void deletePaymentById(long id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
