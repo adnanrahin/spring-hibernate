@@ -3,6 +3,8 @@ package org.product.restful.api.controller;
 import org.product.info.services.CustomerService;
 import org.info.product.models.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,29 +16,48 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @GetMapping
-    public List<Customer> getAllCustomers() {
-        return customerService.findAll();
+    // Get all customers
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Customer>> getAllCustomers() {
+        List<Customer> customers = customerService.findAll();
+        return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public Customer getCustomerById(@PathVariable Long id) {
-        return customerService.findById(id);
+    // Get a customer by ID
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+        Customer customer = customerService.findById(id);
+        if (customer == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
+    // Create a new customer
     @PostMapping
-    public Customer createCustomer(@RequestBody Customer customer) {
-        return customerService.save(customer);
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
+        Customer savedCustomer = customerService.save(customer);
+        return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public Customer updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
+    // Update an existing customer
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
         customer.setCustomerId(id); // Assuming you have a setter for customerId
-        return customerService.save(customer);
+        Customer updatedCustomer = customerService.save(customer);
+        if (updatedCustomer == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable Long id) {
+    // Delete a customer by ID
+    @DeleteMapping("/deleteById/{id}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
+        if (customerService.findById(id) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         customerService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
