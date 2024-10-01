@@ -8,9 +8,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.List;
 
-/**
- * Hello world!
- */
 public class App {
     public static void main(String[] args) {
         // Load the Spring application context

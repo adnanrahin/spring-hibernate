@@ -11,18 +11,26 @@
            http://www.springframework.org/schema/tx
            https://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <!-- Hibernate SessionFactory bean -->
+    <!-- DataSource bean -->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/postgres"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+
+    <!-- Hibernate SessionFactory -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="org.info.product.models"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="hibernate.show_sql">true</prop> <!-- Optional: Show SQL in logs -->
-                <prop key="hibernate.format_sql">true</prop> <!-- Optional: Format SQL in logs -->
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
             </props>
         </property>
-        <property name="packagesToScan" value="org.info.product.models"/>
     </bean>
 
     <!-- Enable transaction management -->
@@ -34,7 +42,7 @@
     </bean>
 
     <!-- Component scanning for controllers and services -->
-    <context:component-scan base-package="org.product.restful.api.controller, org.product.info.services"/>
+    <context:component-scan base-package="org.product.restful.api.controller"/>
 
     <!-- Service beans -->
     <bean id="customerService" class="org.product.info.services.CustomerServiceImpl">
