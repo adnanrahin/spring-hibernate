@@ -6,7 +6,7 @@
 
     <display-name>spring-mvc-demo</display-name>
 
-    <absolute-ordering />
+    <absolute-ordering/>
 
     <!-- Spring MVC Configs -->
 
