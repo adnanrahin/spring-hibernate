@@ -115,6 +115,9 @@
 
 
     <build>
+
+        <finalName>restful_service</finalName>
+
         <plugins>
             <!-- Maven War Plugin -->
             <plugin>
