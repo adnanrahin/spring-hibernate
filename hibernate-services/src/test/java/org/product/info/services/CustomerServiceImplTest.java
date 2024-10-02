@@ -1,26 +1,37 @@
 package org.product.info.services;
 
-import junit.framework.TestCase;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.info.product.models.Customer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.product.info.util.HibernateUtil;
 
 import java.util.List;
 
-public class CustomerServiceImplTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CustomerServiceImplTest {
 
     private CustomerService customerService;
+    private SessionFactory sessionFactory;
     private Session session;
     private Transaction transaction;
 
     @BeforeEach
     public void setUp() {
+        // Initialize SessionFactory (directly load hibernate.cfg.xml using Configuration)
+        sessionFactory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory();
+
+        // Create a new CustomerServiceImpl instance
         customerService = new CustomerServiceImpl();
-        session = HibernateUtil.getSessionFactory().openSession();
+
+        // Inject the sessionFactory into customerService
+        ((CustomerServiceImpl) customerService).setSessionFactory(sessionFactory);
+
+        // Start a session and transaction for each test
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
     }
 
@@ -32,6 +43,9 @@ public class CustomerServiceImplTest extends TestCase {
         if (session != null) {
             session.close();
         }
+        if (sessionFactory != null) {
+            sessionFactory.close();
+        }
     }
 
     @Test
@@ -42,10 +56,13 @@ public class CustomerServiceImplTest extends TestCase {
         customer.setEmail("john.doe@example.com");
         customer.setPhoneNumber("1234567890");
 
+        // Save customer
         Customer savedCustomer = customerService.save(customer);
         assertNotNull(savedCustomer);
         assertEquals("John", savedCustomer.getFirstName());
         assertEquals("Doe", savedCustomer.getLastName());
+
+        // Clean up
         customerService.delete(savedCustomer);
     }
 
@@ -57,12 +74,16 @@ public class CustomerServiceImplTest extends TestCase {
         customer.setEmail("alice.smith@example.com");
         customer.setPhoneNumber("0987654321");
 
+        // Save customer
         Customer savedCustomer = customerService.save(customer);
 
-        Customer foundCustomer = customerService.findById((long) savedCustomer.getCustomerId());
+        // Find customer by ID
+        Customer foundCustomer = customerService.findById(savedCustomer.getCustomerId());
         assertNotNull(foundCustomer);
         assertEquals("Alice", foundCustomer.getFirstName());
         assertEquals("Smith", foundCustomer.getLastName());
+
+        // Clean up
         customerService.delete(savedCustomer);
     }
 
@@ -80,12 +101,16 @@ public class CustomerServiceImplTest extends TestCase {
         customer2.setEmail("jane.doe@example.com");
         customer2.setPhoneNumber("9876543210");
 
+        // Save customers
         customerService.save(customer1);
         customerService.save(customer2);
 
+        // Retrieve all customers
         List<Customer> customers = customerService.findAll();
         assertNotNull(customers);
         assertTrue(customers.size() >= 2);
+
+        // Clean up
         customerService.delete(customer1);
         customerService.delete(customer2);
     }
@@ -98,10 +123,13 @@ public class CustomerServiceImplTest extends TestCase {
         customer.setEmail("michael.jordan@example.com");
         customer.setPhoneNumber("1111111111");
 
+        // Save customer
         Customer savedCustomer = customerService.save(customer);
 
+        // Delete customer
         customerService.delete(savedCustomer);
 
+        // Verify deletion
         Customer deletedCustomer = customerService.findById(savedCustomer.getCustomerId());
         assertNull(deletedCustomer);
     }
@@ -114,11 +142,14 @@ public class CustomerServiceImplTest extends TestCase {
         customer.setEmail("bruce.wayne@example.com");
         customer.setPhoneNumber("9999999999");
 
+        // Save customer
         Customer savedCustomer = customerService.save(customer);
 
-        customerService.deleteById((long) savedCustomer.getCustomerId());
+        // Delete customer by ID
+        customerService.deleteById(savedCustomer.getCustomerId());
 
-        Customer deletedCustomer = customerService.findById((long) savedCustomer.getCustomerId());
+        // Verify deletion
+        Customer deletedCustomer = customerService.findById(savedCustomer.getCustomerId());
         assertNull(deletedCustomer);
     }
 }

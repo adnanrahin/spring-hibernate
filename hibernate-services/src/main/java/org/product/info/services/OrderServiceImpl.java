@@ -1,17 +1,30 @@
 package org.product.info.services;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.info.product.models.Order;
-import org.product.info.util.HibernateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
+
+    private SessionFactory sessionFactory; // Declare SessionFactory
+
+    @Autowired
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory; // Setter for sessionFactory
+    }
+
 
     @Override
     public List<Order> findAllOrders() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             return session.createQuery("FROM Order", Order.class).list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -21,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order findOrderById(long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             return session.get(Order.class, id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -32,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order saveOrder(Order order) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.saveOrUpdate(order); // Save or update the order entity
             transaction.commit();
@@ -48,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void delete(Order order) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.delete(order); // Delete the order entity
             transaction.commit();
@@ -63,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrderById(long id) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             Order order = session.get(Order.class, id);
             if (order != null) {

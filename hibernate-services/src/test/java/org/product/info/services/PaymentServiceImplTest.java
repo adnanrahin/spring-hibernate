@@ -1,13 +1,13 @@
 package org.product.info.services;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.info.product.models.Order;
 import org.info.product.models.Payment;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.product.info.util.HibernateUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -17,13 +17,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class PaymentServiceImplTest {
 
     private PaymentService paymentService;
+    private SessionFactory sessionFactory;
     private Session session;
     private Transaction transaction;
 
     @BeforeEach
     public void setUp() {
+        // Initialize SessionFactory from hibernate.cfg.xml
+        sessionFactory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory();
+
+        // Initialize PaymentService
         paymentService = new PaymentServiceImpl();
-        session = HibernateUtil.getSessionFactory().openSession();
+
+        // Inject SessionFactory into PaymentService
+        ((PaymentServiceImpl) paymentService).setSessionFactory(sessionFactory);
+
+        // Open a new session and start a transaction
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
     }
 
@@ -34,6 +44,9 @@ class PaymentServiceImplTest {
         }
         if (session != null) {
             session.close();
+        }
+        if (sessionFactory != null) {
+            sessionFactory.close();
         }
     }
 
@@ -62,8 +75,7 @@ class PaymentServiceImplTest {
         paymentService.save(payment1);
         paymentService.save(payment2);
 
-
-
+        // Find all payments
         List<Payment> payments = paymentService.findAllPayments();
 
         assertNotNull(payments);
@@ -76,6 +88,7 @@ class PaymentServiceImplTest {
 
     @Test
     void findPaymentById() {
+        // Setup: Create and save a payment
         Order order = new Order();
         order.setOrderDate(new Date());
         session.save(order);
@@ -91,18 +104,21 @@ class PaymentServiceImplTest {
 
         Payment savedPayment = paymentService.save(payment);
 
+        // Act: Find the payment by its ID
         Payment foundPayment = paymentService.findPaymentById(savedPayment.getPaymentId());
 
+        // Assert: Ensure the payment was found correctly
         assertNotNull(foundPayment);
         assertEquals(savedPayment.getPaymentId(), foundPayment.getPaymentId());
         assertEquals(200.00, foundPayment.getAmount());
 
+        // Clean up: Delete payment after test
         paymentService.delete(foundPayment);
     }
 
     @Test
     void save() {
-
+        // Setup: Create and save a payment
         Order order = new Order();
         order.setOrderDate(new Date());
         session.save(order);
@@ -145,8 +161,10 @@ class PaymentServiceImplTest {
 
         Payment savedPayment = paymentService.save(payment);
 
+        // Act: Delete the payment
         paymentService.delete(savedPayment);
 
+        // Assert: Ensure the payment is deleted
         Payment foundPayment = paymentService.findPaymentById(savedPayment.getPaymentId());
         assertNull(foundPayment);
     }
@@ -169,8 +187,10 @@ class PaymentServiceImplTest {
 
         Payment savedPayment = paymentService.save(payment);
 
+        // Act: Delete the payment by ID
         paymentService.deletePaymentById(savedPayment.getPaymentId());
 
+        // Assert: Ensure the payment is deleted
         Payment foundPayment = paymentService.findPaymentById(savedPayment.getPaymentId());
         assertNull(foundPayment);
     }

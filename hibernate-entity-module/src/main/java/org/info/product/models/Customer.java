@@ -23,7 +23,7 @@ public class Customer {
     @Column(name = "phone_number", length = 15)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Order> orders;
 
     public Customer(Long customerId, String firstName, String lastName, String email, String phoneNumber, Set<Order> orders) {

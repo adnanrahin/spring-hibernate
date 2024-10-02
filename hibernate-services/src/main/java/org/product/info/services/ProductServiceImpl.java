@@ -1,20 +1,32 @@
 package org.product.info.services;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.info.product.models.Product;
-import org.product.info.util.HibernateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
+
+    private SessionFactory sessionFactory; // Declare SessionFactory
+
+    @Autowired
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory; // Setter for sessionFactory
+    }
 
     @Override
     public List<Product> findAll() {
         List<Product> products;
         Transaction transaction = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             products = session.createQuery("FROM Product", Product.class).list();
             transaction.commit();
@@ -33,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
         Product product;
         Transaction transaction = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             product = session.get(Product.class, id);
             transaction.commit();
@@ -53,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
         Transaction transaction = null;
         Long productId;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             productId = (Long) session.save(product);
             transaction.commit();
@@ -71,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Product product) {
         Transaction transaction = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.delete(product);
             transaction.commit();

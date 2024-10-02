@@ -1,12 +1,12 @@
 package org.product.info.services;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.info.product.models.Product;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.product.info.util.HibernateUtil;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,13 +15,23 @@ import java.util.List;
 public class ProductServiceImplTest {
 
     private ProductService productService;
+    private SessionFactory sessionFactory;
     private Session session;
     private Transaction transaction;
 
     @BeforeEach
     public void setUp() {
+        // Initialize SessionFactory from hibernate.cfg.xml
+        sessionFactory = new org.hibernate.cfg.Configuration().configure().buildSessionFactory();
+
+        // Initialize ProductService
         productService = new ProductServiceImpl();
-        session = HibernateUtil.getSessionFactory().openSession();
+
+        // Inject SessionFactory into ProductService
+        ((ProductServiceImpl) productService).setSessionFactory(sessionFactory);
+
+        // Open a new session and start a transaction
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
     }
 
@@ -32,6 +42,9 @@ public class ProductServiceImplTest {
         }
         if (session != null) {
             session.close();
+        }
+        if (sessionFactory != null) {
+            sessionFactory.close();
         }
     }
 
@@ -44,6 +57,9 @@ public class ProductServiceImplTest {
 
         // Save the product
         productService.save(product);
+
+        transaction.commit();
+        transaction = session.beginTransaction();
 
         // Fetch the saved product
         Product savedProduct = productService.findById(product.getProductId());
@@ -58,7 +74,6 @@ public class ProductServiceImplTest {
 
     @Test
     public void testFindAllProducts() {
-
         Product product1 = new Product();
         product1.setProductName("Product One");
         product1.setPrice(50.00);
@@ -71,10 +86,14 @@ public class ProductServiceImplTest {
         product2.setStockQuantity(30);
         productService.save(product2);
 
+        transaction.commit();
+        transaction = session.beginTransaction();
+
         List<Product> products = productService.findAll();
         assertNotNull(products);
         assertTrue(products.size() >= 2);
 
+        // Cleanup
         productService.delete(product1);
         productService.delete(product2);
     }
@@ -92,6 +111,7 @@ public class ProductServiceImplTest {
         assertNotNull(foundProduct);
         assertEquals("Find Me", foundProduct.getProductName());
 
+        // Cleanup
         productService.delete(foundProduct);
     }
 

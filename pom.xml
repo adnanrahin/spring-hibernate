@@ -12,6 +12,7 @@
     <modules>
         <module>hibernate-entity-module</module>
         <module>hibernate-services</module>
+        <module>spring-restful-service</module>
     </modules>
 
     <properties>
@@ -28,6 +29,7 @@
     </properties>
 
     <dependencies>
+
         <!-- Hibernate Core -->
         <dependency>
             <groupId>org.hibernate</groupId>
