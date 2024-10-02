@@ -19,7 +19,6 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    // Convert Customer to CustomerDTO
     private CustomerDTO convertToDTO(Customer customer) {
         return new CustomerDTO(
                 customer.getCustomerId(),
@@ -30,7 +29,6 @@ public class CustomerController {
         );
     }
 
-    // Convert CustomerDTO to Customer
     private Customer convertToEntity(CustomerDTO customerDTO) {
         return new Customer(
                 customerDTO.getCustomerId(),
@@ -42,7 +40,6 @@ public class CustomerController {
         );
     }
 
-    // Get all customers
     @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
         List<CustomerDTO> customersDTO = customerService.findAll()
@@ -52,7 +49,6 @@ public class CustomerController {
         return new ResponseEntity<>(customersDTO, HttpStatus.OK);
     }
 
-    // Get a customer by ID
     @GetMapping("/getById/{id}")
     public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id) {
         Customer customer = customerService.findById(id);
@@ -62,14 +58,12 @@ public class CustomerController {
         return new ResponseEntity<>(convertToDTO(customer), HttpStatus.OK);
     }
 
-    // Create a new customer
     @PostMapping("/save")
     public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) {
         Customer savedCustomer = customerService.save(convertToEntity(customerDTO));
         return new ResponseEntity<>(convertToDTO(savedCustomer), HttpStatus.CREATED);
     }
 
-    // Update an existing customer
     @PutMapping("/update/{id}")
     public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
         customerDTO.setCustomerId(id);
@@ -80,7 +74,6 @@ public class CustomerController {
         return new ResponseEntity<>(convertToDTO(updatedCustomer), HttpStatus.OK);
     }
 
-    // Delete a customer by ID
     @DeleteMapping("/deleteById/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
         if (customerService.findById(id) == null) {

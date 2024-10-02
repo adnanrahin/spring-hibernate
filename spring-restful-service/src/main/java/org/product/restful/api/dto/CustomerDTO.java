@@ -7,7 +7,6 @@ public class CustomerDTO {
     private String email;
     private String phoneNumber;
 
-    // Default constructor
     public CustomerDTO() {
     }
 
