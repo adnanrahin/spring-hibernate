@@ -13,7 +13,7 @@
     <!-- DataSource bean -->
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
         <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="url" value="jdbc:postgresql://localhost:5432/postgres"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/product_service_db"/>
         <property name="username" value="root"/>
         <property name="password" value="root"/>
     </bean>
