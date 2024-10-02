@@ -10,7 +10,6 @@ public class CustomerDTO {
     public CustomerDTO() {
     }
 
-    // Constructor with fields
     public CustomerDTO(Long customerId, String firstName, String lastName, String email, String phoneNumber) {
         this.customerId = customerId;
         this.firstName = firstName;
@@ -19,7 +18,6 @@ public class CustomerDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    // Getters and Setters
     public Long getCustomerId() {
         return customerId;
     }
