@@ -62,7 +62,7 @@ public class ProductServiceImplTest {
         transaction = session.beginTransaction();
 
         // Fetch the saved product
-        Product savedProduct = productService.findById(product.getProductId());
+        Product savedProduct = productService.findProductById(product.getProductId());
         assertNotNull(savedProduct);
         assertEquals("Test Product", savedProduct.getProductName());
         assertEquals(99.99, savedProduct.getPrice());
@@ -89,7 +89,7 @@ public class ProductServiceImplTest {
         transaction.commit();
         transaction = session.beginTransaction();
 
-        List<Product> products = productService.findAll();
+        List<Product> products = productService.findAllProduct();
         assertNotNull(products);
         assertTrue(products.size() >= 2);
 
@@ -107,7 +107,7 @@ public class ProductServiceImplTest {
 
         productService.save(product);
 
-        Product foundProduct = productService.findById(product.getProductId());
+        Product foundProduct = productService.findProductById(product.getProductId());
         assertNotNull(foundProduct);
         assertEquals("Find Me", foundProduct.getProductName());
 
@@ -126,7 +126,7 @@ public class ProductServiceImplTest {
 
         productService.delete(product);
 
-        Product deletedProduct = productService.findById(product.getProductId());
+        Product deletedProduct = productService.findProductById(product.getProductId());
         assertNull(deletedProduct);
     }
 
@@ -139,9 +139,9 @@ public class ProductServiceImplTest {
 
         productService.save(product);
 
-        productService.deleteById(product.getProductId());
+        productService.deleteProductById(product.getProductId());
 
-        Product deletedProduct = productService.findById(product.getProductId());
+        Product deletedProduct = productService.findProductById(product.getProductId());
         assertNull(deletedProduct);
     }
 }

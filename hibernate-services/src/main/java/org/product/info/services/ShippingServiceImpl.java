@@ -1,9 +1,9 @@
 package org.product.info.services;
 
-import org.info.product.models.Customer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.info.product.models.Shipping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,37 +12,37 @@ import java.util.List;
 
 @Service
 @Transactional
-public class CustomerServiceImpl implements CustomerService {
+public class ShippingServiceImpl implements ShippingService {
 
-    private SessionFactory sessionFactory; // Declare SessionFactory
+    private SessionFactory sessionFactory;
 
     @Autowired
     public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory; // Setter for sessionFactory
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public List<Customer> findAllCustomer() {
+    public List<Shipping> findAllShipping() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Customer", Customer.class).list();
+            return session.createQuery("from Shipping", Shipping.class).list();
         }
     }
 
     @Override
-    public Customer findCustomerById(Long id) {
+    public Shipping findShippingById(long id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.get(Customer.class, id);
+            return session.get(Shipping.class, id);
         }
     }
 
     @Override
-    public Customer saveCustomer(Customer customer) {
+    public Shipping save(Shipping shipping) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.saveOrUpdate(customer);
+            session.saveOrUpdate(shipping);
             transaction.commit();
-            return customer;
+            return shipping;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
@@ -51,11 +51,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomer(Customer customer) {
+    public void delete(Shipping shipping) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.delete(customer);
+            session.delete(shipping);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
@@ -64,13 +64,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomerById(Long id) {
+    public void deleteShippingById(long id) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            Customer customer = session.get(Customer.class, id);
-            if (customer != null) {
-                session.delete(customer);
+            Shipping shipping = session.get(Shipping.class, id);
+            if (shipping != null) {
+                session.delete(shipping);
             }
             transaction.commit();
         } catch (Exception e) {

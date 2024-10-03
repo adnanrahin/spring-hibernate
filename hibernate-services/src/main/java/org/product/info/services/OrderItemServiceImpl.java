@@ -1,6 +1,6 @@
 package org.product.info.services;
 
-import org.info.product.models.Customer;
+import org.info.product.models.OrderItem;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,37 +12,37 @@ import java.util.List;
 
 @Service
 @Transactional
-public class CustomerServiceImpl implements CustomerService {
+public class OrderItemServiceImpl implements OrderItemService {
 
-    private SessionFactory sessionFactory; // Declare SessionFactory
+    private SessionFactory sessionFactory;
 
     @Autowired
     public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory; // Setter for sessionFactory
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public List<Customer> findAllCustomer() {
+    public List<OrderItem> findAllOrderItem() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Customer", Customer.class).list();
+            return session.createQuery("from OrderItem", OrderItem.class).list();
         }
     }
 
     @Override
-    public Customer findCustomerById(Long id) {
+    public OrderItem findOrderItemById(long id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.get(Customer.class, id);
+            return session.get(OrderItem.class, id);
         }
     }
 
     @Override
-    public Customer saveCustomer(Customer customer) {
+    public OrderItem saveOrderItem(OrderItem orderItem) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.saveOrUpdate(customer);
+            session.saveOrUpdate(orderItem);
             transaction.commit();
-            return customer;
+            return orderItem;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
@@ -51,11 +51,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomer(Customer customer) {
+    public void deleteOrderItem(OrderItem orderItem) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.delete(customer);
+            session.delete(orderItem);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
@@ -64,13 +64,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomerById(Long id) {
+    public void deleteOrderItemById(long id) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            Customer customer = session.get(Customer.class, id);
-            if (customer != null) {
-                session.delete(customer);
+            OrderItem orderItem = session.get(OrderItem.class, id);
+            if (orderItem != null) {
+                session.delete(orderItem);
             }
             transaction.commit();
         } catch (Exception e) {

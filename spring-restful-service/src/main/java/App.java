@@ -12,7 +12,7 @@ public class App {
 
         CustomerService customerService = context.getBean(CustomerService.class);
 
-        List<Customer> customers = customerService.findAll();
+        List<Customer> customers = customerService.findAllCustomer();
         for (Customer customer : customers) {
             System.out.println(customer.getCustomerId() + " " + customer.getFirstName() + " " + customer.getLastName());
         }

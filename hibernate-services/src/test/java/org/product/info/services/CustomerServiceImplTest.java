@@ -57,13 +57,13 @@ public class CustomerServiceImplTest {
         customer.setPhoneNumber("1234567890");
 
         // Save customer
-        Customer savedCustomer = customerService.save(customer);
+        Customer savedCustomer = customerService.saveCustomer(customer);
         assertNotNull(savedCustomer);
         assertEquals("John", savedCustomer.getFirstName());
         assertEquals("Doe", savedCustomer.getLastName());
 
         // Clean up
-        customerService.delete(savedCustomer);
+        customerService.deleteCustomer(savedCustomer);
     }
 
     @Test
@@ -75,16 +75,16 @@ public class CustomerServiceImplTest {
         customer.setPhoneNumber("0987654321");
 
         // Save customer
-        Customer savedCustomer = customerService.save(customer);
+        Customer savedCustomer = customerService.saveCustomer(customer);
 
         // Find customer by ID
-        Customer foundCustomer = customerService.findById(savedCustomer.getCustomerId());
+        Customer foundCustomer = customerService.findCustomerById(savedCustomer.getCustomerId());
         assertNotNull(foundCustomer);
         assertEquals("Alice", foundCustomer.getFirstName());
         assertEquals("Smith", foundCustomer.getLastName());
 
         // Clean up
-        customerService.delete(savedCustomer);
+        customerService.deleteCustomer(savedCustomer);
     }
 
     @Test
@@ -102,17 +102,17 @@ public class CustomerServiceImplTest {
         customer2.setPhoneNumber("9876543210");
 
         // Save customers
-        customerService.save(customer1);
-        customerService.save(customer2);
+        customerService.saveCustomer(customer1);
+        customerService.saveCustomer(customer2);
 
         // Retrieve all customers
-        List<Customer> customers = customerService.findAll();
+        List<Customer> customers = customerService.findAllCustomer();
         assertNotNull(customers);
         assertTrue(customers.size() >= 2);
 
         // Clean up
-        customerService.delete(customer1);
-        customerService.delete(customer2);
+        customerService.deleteCustomer(customer1);
+        customerService.deleteCustomer(customer2);
     }
 
     @Test
@@ -124,13 +124,13 @@ public class CustomerServiceImplTest {
         customer.setPhoneNumber("1111111111");
 
         // Save customer
-        Customer savedCustomer = customerService.save(customer);
+        Customer savedCustomer = customerService.saveCustomer(customer);
 
         // Delete customer
-        customerService.delete(savedCustomer);
+        customerService.deleteCustomer(savedCustomer);
 
         // Verify deletion
-        Customer deletedCustomer = customerService.findById(savedCustomer.getCustomerId());
+        Customer deletedCustomer = customerService.findCustomerById(savedCustomer.getCustomerId());
         assertNull(deletedCustomer);
     }
 
@@ -143,13 +143,13 @@ public class CustomerServiceImplTest {
         customer.setPhoneNumber("9999999999");
 
         // Save customer
-        Customer savedCustomer = customerService.save(customer);
+        Customer savedCustomer = customerService.saveCustomer(customer);
 
         // Delete customer by ID
-        customerService.deleteById(savedCustomer.getCustomerId());
+        customerService.deleteCustomerById(savedCustomer.getCustomerId());
 
         // Verify deletion
-        Customer deletedCustomer = customerService.findById(savedCustomer.getCustomerId());
+        Customer deletedCustomer = customerService.findCustomerById(savedCustomer.getCustomerId());
         assertNull(deletedCustomer);
     }
 }

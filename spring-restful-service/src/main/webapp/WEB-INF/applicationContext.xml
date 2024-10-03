@@ -63,4 +63,12 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="shippingService" class="org.product.info.services.ShippingServiceImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="orderItemService" class="org.product.info.services.OrderItemServiceImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
 </beans>

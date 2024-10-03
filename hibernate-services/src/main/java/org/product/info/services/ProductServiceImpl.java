@@ -22,7 +22,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findAll() {
+    public List<Product> findAllProduct() {
         List<Product> products;
         Transaction transaction = null;
 
@@ -41,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findById(Long id) {
+    public Product findProductById(Long id) {
         Product product;
         Transaction transaction = null;
 
@@ -76,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
             throw e;
         }
 
-        return findById(productId);
+        return findProductById(productId);
     }
 
     @Override
@@ -96,8 +96,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        Product product = findById(id);
+    public void deleteProductById(Long id) {
+        Product product = findProductById(id);
         if (product != null) {
             delete(product);
         }

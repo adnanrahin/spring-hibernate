@@ -70,7 +70,7 @@ public class OrderServiceImplTest {
         order.setOrderDate(new Date());
         order.setTotalAmount(1500.00);
 
-        orderService.saveOrder(order);
+        orderService.save(order);
 
         // Retrieve and verify saved order
         Order savedOrder = orderService.findOrderById(order.getOrderId());
@@ -107,13 +107,13 @@ public class OrderServiceImplTest {
         order1.setCustomer(customer1);
         order1.setOrderDate(new Date());
         order1.setTotalAmount(300.00);
-        orderService.saveOrder(order1);
+        orderService.save(order1);
 
         Order order2 = new Order();
         order2.setCustomer(customer2);
         order2.setOrderDate(new Date());
         order2.setTotalAmount(500.00);
-        orderService.saveOrder(order2);
+        orderService.save(order2);
 
         // Fetch all orders and validate
         List<Order> orders = orderService.findAllOrders();

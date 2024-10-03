@@ -42,14 +42,14 @@ public class ProductController {
 
     @GetMapping("/getAll")
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        List<Product> products = productService.findAll();
+        List<Product> products = productService.findAllProduct();
         List<ProductDTO> productDTOs = products.stream().map(this::convertToDTO).collect(Collectors.toList());
         return new ResponseEntity<>(productDTOs, HttpStatus.OK);
     }
 
     @GetMapping("getById/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
-        Product product = productService.findById(id);
+        Product product = productService.findProductById(id);
         if (product != null) {
             ProductDTO productDTO = convertToDTO(product);
             return new ResponseEntity<>(productDTO, HttpStatus.OK);
@@ -68,7 +68,7 @@ public class ProductController {
 
     @PutMapping("/updateProduct/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
-        Product existingProduct = productService.findById(id);
+        Product existingProduct = productService.findProductById(id);
         if (existingProduct != null) {
             existingProduct.setProductName(productDTO.getProductName());
             existingProduct.setPrice(productDTO.getPrice());
@@ -83,9 +83,9 @@ public class ProductController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteProductById(@PathVariable Long id) {
-        Product product = productService.findById(id);
+        Product product = productService.findProductById(id);
         if (product != null) {
-            productService.deleteById(id);
+            productService.deleteProductById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

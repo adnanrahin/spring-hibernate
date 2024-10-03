@@ -42,7 +42,7 @@ public class CustomerController {
 
     @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
-        List<CustomerDTO> customersDTO = customerService.findAll()
+        List<CustomerDTO> customersDTO = customerService.findAllCustomer()
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -51,7 +51,7 @@ public class CustomerController {
 
     @GetMapping("/getById/{id}")
     public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id) {
-        Customer customer = customerService.findById(id);
+        Customer customer = customerService.findCustomerById(id);
         if (customer == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -60,14 +60,14 @@ public class CustomerController {
 
     @PostMapping("/save")
     public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) {
-        Customer savedCustomer = customerService.save(convertToEntity(customerDTO));
+        Customer savedCustomer = customerService.saveCustomer(convertToEntity(customerDTO));
         return new ResponseEntity<>(convertToDTO(savedCustomer), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
         customerDTO.setCustomerId(id);
-        Customer updatedCustomer = customerService.save(convertToEntity(customerDTO));
+        Customer updatedCustomer = customerService.saveCustomer(convertToEntity(customerDTO));
         if (updatedCustomer == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -76,10 +76,10 @@ public class CustomerController {
 
     @DeleteMapping("/deleteById/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
-        if (customerService.findById(id) == null) {
+        if (customerService.findCustomerById(id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        customerService.deleteById(id);
+        customerService.deleteCustomerById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

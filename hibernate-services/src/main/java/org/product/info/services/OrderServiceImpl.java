@@ -1,5 +1,6 @@
 package org.product.info.services;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -14,28 +15,39 @@ import java.util.List;
 @Transactional
 public class OrderServiceImpl implements OrderService {
 
-    private SessionFactory sessionFactory; // Declare SessionFactory
+    private SessionFactory sessionFactory;
 
     @Autowired
     public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory; // Setter for sessionFactory
+        this.sessionFactory = sessionFactory;
     }
-
 
     @Override
     public List<Order> findAllOrders() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM Order", Order.class).list();
+            List<Order> orders = session.createQuery("FROM Order", Order.class).list();
+            for (Order order : orders) {
+                Hibernate.initialize(order.getOrderItems());
+                Hibernate.initialize(order.getPayments());
+                Hibernate.initialize(order.getShippings());
+            }
+            return orders;
         } catch (Exception e) {
             e.printStackTrace();
-            return List.of(); // Return empty list if an error occurs
+            return List.of(); // Return an empty list if an error occurs
         }
     }
 
     @Override
     public Order findOrderById(long id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.get(Order.class, id);
+            Order order = session.get(Order.class, id);
+            if (order != null) {
+                Hibernate.initialize(order.getOrderItems());
+                Hibernate.initialize(order.getPayments());
+                Hibernate.initialize(order.getShippings());
+            }
+            return order;
         } catch (Exception e) {
             e.printStackTrace();
             return null; // Return null if an error occurs
@@ -43,19 +55,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order saveOrder(Order order) {
+    public Order save(Order order) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.saveOrUpdate(order); // Save or update the order entity
+            session.saveOrUpdate(order);
             transaction.commit();
+            return order;
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback(); // Rollback if any exception occurs
+                transaction.rollback();
             }
             e.printStackTrace();
+            return null;
         }
-        return order;
     }
 
     @Override
@@ -63,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.delete(order); // Delete the order entity
+            session.delete(order);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -80,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
             transaction = session.beginTransaction();
             Order order = session.get(Order.class, id);
             if (order != null) {
-                session.delete(order); // Delete the order if it exists
+                session.delete(order);
             }
             transaction.commit();
         } catch (Exception e) {
