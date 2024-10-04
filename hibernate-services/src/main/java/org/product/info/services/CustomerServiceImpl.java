@@ -10,15 +10,15 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Service
+@Service("customerService")
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
 
-    private SessionFactory sessionFactory; // Declare SessionFactory
+    private SessionFactory sessionFactory;
 
     @Autowired
     public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory; // Setter for sessionFactory
+        this.sessionFactory = sessionFactory;
     }
 
     @Override

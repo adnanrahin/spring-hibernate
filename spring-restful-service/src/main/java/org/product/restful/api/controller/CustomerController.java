@@ -4,6 +4,7 @@ import org.product.info.services.CustomerService;
 import org.info.product.models.Customer;
 import org.product.restful.api.dto.CustomerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/customers")
 public class CustomerController {
 
-    @Autowired
+
+    @Qualifier("customerService")
     private CustomerService customerService;
+
+    @Autowired
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     private CustomerDTO convertToDTO(Customer customer) {
         return new CustomerDTO(
