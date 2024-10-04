@@ -43,7 +43,7 @@ public class CustomerController {
                 customerDTO.getLastName(),
                 customerDTO.getEmail(),
                 customerDTO.getPhoneNumber(),
-                null // Assuming orders will be handled separately
+                null
         );
     }
 
