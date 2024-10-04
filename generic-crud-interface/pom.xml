@@ -11,14 +11,13 @@
     <packaging>jar</packaging>
 
     <name>generic-crud-interface</name>
-    <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-        
+
         <dependency>
             <groupId>org.product.info.models</groupId>
             <artifactId>hibernate-entity-module</artifactId>
