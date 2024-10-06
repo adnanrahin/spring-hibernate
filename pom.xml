@@ -14,6 +14,7 @@
         <module>hibernate-services</module>
         <module>spring-restful-service</module>
         <module>generic-crud-interface</module>
+        <module>crud-interface-rest-service</module>
     </modules>
 
     <properties>

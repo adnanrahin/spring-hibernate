@@ -7,6 +7,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>org.product.crud</groupId>
     <artifactId>generic-crud-interface</artifactId>
     <packaging>jar</packaging>
 
