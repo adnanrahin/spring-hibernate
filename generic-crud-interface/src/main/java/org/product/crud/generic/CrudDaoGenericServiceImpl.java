@@ -1,38 +1,67 @@
 package org.product.crud.generic;
 
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+import java.util.List;
+
+@Component
 public class CrudDaoGenericServiceImpl<T, ID> implements CrudDaoGenericService<T, ID> {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final SessionFactory sessionFactory;
     private final Class<T> type;
 
-    public CrudDaoGenericServiceImpl(Class<T> type) {
+    public CrudDaoGenericServiceImpl(SessionFactory sessionFactory, Class<T> type) {
+        this.sessionFactory = sessionFactory;
         this.type = type;
     }
 
     @Override
     public List<T> findAll() {
-        return entityManager.createQuery("from " + type.getName(), type).getResultList();
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from " + type.getName(), type).getResultList();
+        }
     }
 
     @Override
     public T findById(ID id) {
-        return entityManager.find(type, id);
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(type, (Serializable) id);
+        }
     }
 
     @Override
     public T save(T entity) {
-        entityManager.persist(entity);
-        return entity;
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.persist(entity);
+            transaction.commit();
+            return entity;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw e;
+        }
     }
 
     @Override
     public void delete(T entity) {
-        entityManager.remove(entity);
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.delete(entity);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw e;
+        }
     }
 
     @Override
