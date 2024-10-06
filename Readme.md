@@ -342,15 +342,26 @@ This project is a hands-on way for me to understand these concepts deeply, empow
 ```
 
 ### Build The Project
-1. This is Multi-Module Maven Project, so it's requires to install all the dependent modules before spun up the restful webservice. 
-2. run `mvn clean install -DskipTests` this will trigger the build without the integration tests.
-3. To run the build with integration tests we need build the docker postgres database.
-4. `cd docker-db` and do `docker-compose up -d`
-5. Then run `mvn clean install`
+
+1. This is a Multi-Module Maven Project, so it requires installing all the dependent modules before spinning up the RESTful web service.
+2. Run `mvn clean install -DskipTests` to trigger the build without running the integration tests.
+3. To run the build with integration tests, we need to build the Docker PostgreSQL database.
+4. Navigate to the `docker-db` directory and run `docker-compose up -d` to start the PostgreSQL container.
+5. Then, run `mvn clean install` again to complete the build process with integration tests.
 
 ### Deploy The Project
-1. To Deploy the project I have used `wildfly-14.0.1.Final`
-2. Please Download the wildfly from here [wildfly](https://download.jboss.org/wildfly/14.0.1.Final/wildfly-14.0.1.Final.tar.gz)
-3. Start the wildfly server and Deploy the Application from the UI.
 
+1. For deployment, I have used `wildfly-14.0.1.Final`.
+2. You can download WildFly from [here](https://download.jboss.org/wildfly/14.0.1.Final/wildfly-14.0.1.Final.tar.gz).
+3. Start the WildFly server, and deploy the application using the UI.
+
+### Additional Deployment Instructions
+
+After building the project and deploying the PostgreSQL database to the Docker container, follow these steps:
+
+1. This Spring project has multiple RESTful WAR files that can be deployed to the WildFly server. You can deploy them in parallel.
+    - First, we have `restful_service.war`, which uses its own `Service` and `ServiceImpl` interfaces. These interfaces are not highly generic, but they use the `hibernate-service` module to access all the APIs. The code for this module is under the `hibernate-service` source code.
+    - Then, there is the `generic_restful_web_service`, which is a fully generic interface. All the Hibernate logic is implemented only once. The source code for this is available under the `generic-crud-interface` module.
+
+Please make sure to deploy all the WAR files to the WildFly server after setting up the PostgreSQL database.
 
