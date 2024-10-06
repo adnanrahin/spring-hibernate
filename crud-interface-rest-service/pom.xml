@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>crud-interface-rest-service</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>crud-interface-rest-service</name>
     <properties>

@@ -47,7 +47,7 @@
     </bean>
 
     <!-- Component scanning for controllers and services -->
-    <context:component-scan base-package="org.product.crud.app.implemnetations"/>
+    <context:component-scan base-package="org.product.info.controllers"/>
 
     <!-- Service beans -->
     <bean id="customerService" class="org.product.crud.app.implemnetations.CustomerServiceImpl">
