@@ -13,6 +13,7 @@
         <module>hibernate-entity-module</module>
         <module>hibernate-services</module>
         <module>spring-restful-service</module>
+        <module>generic-crud-interface</module>
     </modules>
 
     <properties>
@@ -26,9 +27,34 @@
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <hibernate.version>5.6.15.Final</hibernate.version>
         <mysql.version>8.0.33</mysql.version>
+        <postgresql.version>42.5.6</postgresql.version>
+        <spring.version>5.3.30</spring.version>
+        <jackson.version>2.15.2</jackson.version>
     </properties>
 
     <dependencies>
+
+        <!-- Spring Core -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Spring Web MVC -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- Spring ORM for Hibernate integration -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
         <!-- Hibernate Core -->
         <dependency>
@@ -71,7 +97,31 @@
             <scope>test</scope>
         </dependency>
 
-    </dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+
+    </dependencies>
 
 </project>
