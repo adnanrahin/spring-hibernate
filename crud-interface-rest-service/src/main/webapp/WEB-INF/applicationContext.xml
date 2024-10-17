@@ -50,7 +50,12 @@
     <context:component-scan base-package="org.product.info.controllers"/>
 
     <!-- Service beans -->
-    <bean id="customerService" class="org.product.crud.app.implemnetations.CustomerServiceImpl">
+    <bean id="customerService" class="org.product.crud.app.implementations.CustomerServiceImpl">
+        <constructor-arg ref="sessionFactory"/>
+    </bean>
+
+    <!-- Service beans -->
+    <bean id="productService" class="org.product.crud.app.implementations.ProductServiceImpl">
         <constructor-arg ref="sessionFactory"/>
     </bean>
 

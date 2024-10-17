@@ -1,4 +1,4 @@
-package org.product.crud.app.implemnetations;
+package org.product.crud.app.implementations;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
